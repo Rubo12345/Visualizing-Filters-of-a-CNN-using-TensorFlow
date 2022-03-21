@@ -56,7 +56,31 @@ plot_image(image, title = 'random')
 
 '''
 Training Loop using Gradient Ascent Algorithm
+f_index = filter index
 '''
 
-# def Train(layer_name, f_index = None, epoch = 50)
+def Train(layer_name, f_index = None, epoch = 50):
+    submodel = get_submodel(layer_name)
+    num_filters = submodel.output.shape[-1]
 
+    if f_index is None:
+        f_index = random.ranint(0,num_filters - 1)
+    assert num_filters > f_index, 'f_index is out of bounds'
+
+    image = create_image()
+
+    verbose_step = int(epoch / 10)   # to keep a track of the loss
+ 
+    for i in range(epoch):
+        with tf.GradientTape() as tape:
+            tape.watch(image)               #Watch the image in gradient tape context
+            output = submodel(tf.expand_dims(image,axis = 0))[:,:,:,f_index]
+            # expand the image and look at the output for only a particular filter
+            loss = tf.math.reduce_mean(output)    # loss for output of a particular filter
+        grads = tape.gradient(loss,image)
+        grads = tf.math.l2_normalize(grads) #l2 normalization
+        image += grads * 10     # Gradient Ascent
+    
+        if (i+1) % verbose_step == 0:
+            print(f'Iteration: {i+1}, Loss: {loss.numpy():.4f}')
+    plot_image(image, f'{layer_name},{f_index}')
