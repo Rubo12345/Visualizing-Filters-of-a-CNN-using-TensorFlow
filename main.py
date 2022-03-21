@@ -12,7 +12,7 @@ weights = 'imagenet', we take the pretrained weights of the imagenet
 input_shape (96,96,3) = input shape of the image
 '''
 model = tf.keras.applications.vgg16.VGG16(include_top = False, weights = 'imagenet',input_shape = (96,96,3))
-model.summary()       # summary of the model gets printed in the terminal
+# model.summary()       # summary of the model gets printed in the terminal
 
 
 '''
@@ -23,7 +23,7 @@ model.get_layer(layer_name).output = output as the layer of the model VGG16
 '''
 def get_submodel(layer_name):
     return tf.keras.models.Model(model.input, model.get_layer(layer_name).output)   
-get_submodel('block1_conv1').summary()    # summary of the sub_model gets printed in the terminal
+# get_submodel('block1_conv1').summary()    # summary of the sub_model gets printed in the terminal
 
 '''
 Image Visualization
@@ -51,8 +51,8 @@ def plot_image(image, title = 'random'):
     plt.title(title)
     plt.show()
 
-image  = create_image()
-plot_image(image, title = 'random')
+# image  = create_image()
+# plot_image(image, title = 'random')  
 
 '''
 Training Loop using Gradient Ascent Algorithm
@@ -64,7 +64,7 @@ def Train(layer_name, f_index = None, epoch = 50):
     num_filters = submodel.output.shape[-1]
 
     if f_index is None:
-        f_index = random.ranint(0,num_filters - 1)
+        f_index = random.randint(0,num_filters - 1)
     assert num_filters > f_index, 'f_index is out of bounds'
 
     image = create_image()
@@ -84,3 +84,10 @@ def Train(layer_name, f_index = None, epoch = 50):
         if (i+1) % verbose_step == 0:
             print(f'Iteration: {i+1}, Loss: {loss.numpy():.4f}')
     plot_image(image, f'{layer_name},{f_index}')
+
+# print([layer.name for layer in model.layers if 'conv' in layer.name])
+
+layer_name = 'block1_conv1' #['block1_conv1', 'block1_conv2', 'block2_conv1', 'block2_conv2', 'block3_conv1', 'block3_conv2', 'block3_conv3', 'block4_conv1', 'block4_conv2', 'block4_conv3', 'block5_conv1', 'block5_conv2', 'block5_conv3']
+Train(layer_name, epoch = 100)
+
+# Now run the code a visualize different filter patterns for different layers
