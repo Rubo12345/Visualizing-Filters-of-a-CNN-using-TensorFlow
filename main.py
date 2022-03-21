@@ -31,5 +31,32 @@ Function to create random images to use them as input images.
 We will use a pretrained model (VGG 16) and input random images to it.
 '''
 
+def create_image():
+    return tf.random.uniform((96,96,3), minval = -0.5, maxval = 0.5)
 
+'''
+image = image - tf.math.reduce_min(image)
+image = image / tf.math.reduce_max(image)
+what this means is that if the mean is centered around zero or something like that, 
+we have some values which are negative, let's say, minus one. And if that's the minimum value of our image in our image,
+then we just add that to the image. And once we have all positive values, we scale this in a way so that all the values
+are from 0 to 1. It helps in plotting the image
+'''
+def plot_image(image, title = 'random'):
+    image = image - tf.math.reduce_min(image)
+    image = image / tf.math.reduce_max(image)
+    plt.imshow(image)
+    plt.xticks([])
+    plt.yticks([])
+    plt.title(title)
+    plt.show()
+
+image  = create_image()
+plot_image(image, title = 'random')
+
+'''
+Training Loop using Gradient Ascent Algorithm
+'''
+
+# def Train(layer_name, f_index = None, epoch = 50)
 
