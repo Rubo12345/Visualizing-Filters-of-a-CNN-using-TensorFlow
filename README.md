@@ -4,3 +4,10 @@ I use a Convolutional Neural Network - the popular VGG16 model, and visualize va
 (Detailed comments in the code)
 
 `main.py`
+
+Steps Involved:
+1. Downloading the Model (VGG-16 model)
+2. Get Submodels (layers)
+3. Image Visualization (Matplotlib)
+4. Training Loop (training for 100 epochs)
+5. Final Results (Visualize different filter patterns)
